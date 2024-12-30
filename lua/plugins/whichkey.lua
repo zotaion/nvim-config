@@ -45,6 +45,7 @@ return {
             {"<leader>c", group = "[C]ode", icon=""},
             {"<leader>d",group = "[D]ebug", icon ="" },
             {"<leader>e",group = "[E]xplorer", icon="󰨀"},
+            {"<leader>b",group = "[B]Background", icon="󰛩"},
             {"<leader>f", group = "[F]ind", icon="󱩾"},
             {"<leader>g", group = "[G]it", icon=""},
             {"<leader>J", group = "[J]ava", icon=""},
