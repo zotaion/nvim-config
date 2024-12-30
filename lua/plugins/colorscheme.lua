@@ -55,6 +55,20 @@ return {
   opts = {},
   config = function()
         vim.cmd.colorscheme("melange")
+        
+        -- Function to toggle background
+        local function toggle_background()
+            if vim.o.background == "dark" then
+                vim.o.background = "light"
+                print("Switched to light mode")
+            else
+                vim.o.background = "dark"
+               print("Switched to dark mode")
+            end
+        end
+
+        -- Map the function to a key (e.g., <leader>b)
+        vim.keymap.set('n', '<leader>b', toggle_background, { noremap = true, silent = true, desc = "Toggle Background" })
         end
 }
 }
