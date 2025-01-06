@@ -55,16 +55,19 @@ return {
   opts = {},
   config = function()
         vim.cmd.colorscheme("melange")
-        
         -- Function to toggle background
         local function toggle_background()
             if vim.o.background == "dark" then
                 vim.o.background = "light"
+                scheme = "melange_light"
                 print("Switched to light mode")
             else
                 vim.o.background = "dark"
+                scheme = "melange_dark"
                print("Switched to dark mode")
             end
+            local wezterm_cli = "wezterm cli set-user-var COLOR_SCHEME " .. scheme
+            print(vim.fn.system(wezterm_cli))
         end
 
         -- Map the function to a key (e.g., <leader>b)
