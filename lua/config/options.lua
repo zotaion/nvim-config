@@ -38,3 +38,4 @@ vim.opt.swapfile = false -- creates a swapfile
 vim.opt.hlsearch = true -- highlight all matches in search
 vim.opt.ignorecase = true -- ignore case in search
 vim.opt.smartcase = true -- match case if explicitly stated
+vim.o.shell = "/usr/bin/fish"

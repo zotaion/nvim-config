@@ -41,45 +41,51 @@
 --             lualine_bg_color = "#44475a", -- default nil
 --             -- set italic comment
 --             italic_comment = true, -- default false
---             -- overrides the default highlights with table see `:h synIDattr`             
+--             -- overrides the default highlights with table see `:h synIDattr`
 --         })
 --         -- Make sure to set the color scheme when neovim loads and configures the dracula plugin
 --         vim.cmd.colorscheme("dracula")
 --     end,
 -- }
 return {
-{
-  "savq/melange-nvim",
-  lazy = false,
-  priority = 1000,
-  opts = {},
-  config = function()
-        vim.cmd.colorscheme("melange")
-        -- Function to toggle background
-        local function toggle_background()
-            if vim.o.background == "dark" then
-                vim.o.background = "light"
-                scheme = "melange_light"
-                print("Switched to light mode")
-            else
-                vim.o.background = "dark"
-                scheme = "melange_dark"
-               print("Switched to dark mode")
-            end
-            local wezterm_cli = "wezterm cli set-user-var COLOR_SCHEME " .. scheme
-            print(vim.fn.system(wezterm_cli))
-        end
+    {
+        "savq/melange-nvim",
+        lazy = false,
+        priority = 1000,
+        opts = {},
+        config = function()
+            vim.cmd.colorscheme("melange")
+            -- Function to toggle background
+            local function toggle_background()
+                if vim.o.background == "dark" then
+                    vim.o.background = "light"
+                    scheme = "melange_light"
+                    print("Switched to light mode")
+                else
+                    vim.o.background = "dark"
+                    scheme = "melange_dark"
+                    print("Switched to dark mode")
+                end
 
-        -- Map the function to a key (e.g., <leader>b)
-        vim.keymap.set('n', '<leader>b', toggle_background, { noremap = true, silent = true, desc = "Toggle Background" })
+
+                local base64_value = vim.fn.system("echo -n " .. vim.fn.shellescape('bar') .. " | base64")
+                local escape_seq = string.format("\x1b]1337;SetUserVar=%s=%s\x07", 'wtheme',
+                    base64_value:match("^%s*(.-)%s*$"))
+                -- vim.api.nvim_chan_send(vim.api.nvim_open_term(bufnr, {}), escape_seq)
+
+                vim.fn.system("printf '\\033]1337;SetUserVar=wtheme=%s\\007' $(echo -n 'bar' | base64)")
+            end
+            -- Map the function to a key (e.g., <leader>b)
+            vim.keymap.set('n', '<leader>b', toggle_background,
+                { noremap = true, silent = true, desc = "Toggle Background" })
         end
-}
+    }
 }
 -- return {
 --     "rebelot/kanagawa.nvim",
 --     lazy = false,
 --     priority = 1000,
---     config = function() 
+--     config = function()
 --         vim.cmd.colorscheme("kanagawa")
 --     end
 -- }
