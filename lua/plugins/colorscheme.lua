@@ -78,6 +78,8 @@ return {
             -- Map the function to a key (e.g., <leader>b)
             vim.keymap.set('n', '<leader>b', toggle_background,
                 { noremap = true, silent = true, desc = "Toggle Background" })
+
+        vim.keymap.set('n', '<leader>q', ':q<CR>', { noremap = true, silent = true })
         end
     }
 }

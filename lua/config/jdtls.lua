@@ -53,7 +53,7 @@ end
 local function java_keymaps()
     -- Allow yourself to run JdtCompile as a Vim command
     vim.cmd(
-    "command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_compile JdtCompile lua require('jdtls').compile(<f-args>)")
+        "command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_compile JdtCompile lua require('jdtls').compile(<f-args>)")
     -- Allow yourself/register to run JdtUpdateConfig as a Vim command
     vim.cmd("command! -buffer JdtUpdateConfig lua require('jdtls').update_project_config()")
     -- Allow yourself/register to run JdtBytecode as a Vim command
@@ -143,19 +143,41 @@ local function setup_jdtls()
         '-configuration',
         os_config,
         '-data',
-        workspace_dir
+        workspace_dir,
+        '-clean',
+
     }
 
     -- Configure settings in the JDTLS server
     local settings = {
+        init_options = {
+            bundles = {},
+            workspaceFolders = true
+        },
         java = {
+            -- Enable all compiler options
+            compilerOptions = {
+                enablePreviewFeatures = true,
+                -- Add MapStruct compiler arguments
+                generatedOutputDirectory = "target/generated-sources/annotations"
+            },
+            cleanup = {
+                actionsOnStart = {
+                    "cleanup",
+                    "organize"
+                }
+            },
+            autobuild = {
+                enabled = true,
+            },
             -- Enable code formatting
             format = {
                 enabled = true,
                 -- Use the Google Style guide for code formattingh
                 settings = {
-                    url = vim.fn.stdpath("config") .. "/lang_servers/intellij-java-google-style.xml",
-                    profile = "GoogleStyle"
+                    -- url = vim.fn.stdpath("config") .. "/lang_servers/intellij-java-google-style.xml",
+                    -- profile = "GoogleStyle"
+                    url = "/home/ion/.config/nvim/lang_servers/intellij-java-google-style.xml",
                 }
             },
             -- Enable downloading archives from eclipse automatically
@@ -203,8 +225,10 @@ local function setup_jdtls()
                     "java",
                     "jakarta",
                     "javax",
+                    "lombok",
+                    "ro",
                     "com",
-                    "org",
+                    "org.springframework"
                 }
             },
             sources = {
@@ -229,7 +253,10 @@ local function setup_jdtls()
             },
             -- If changes to the project will require the developer to update the projects configuration advise the developer before accepting the change
             configuration = {
-                updateBuildConfiguration = "interactive"
+                updateBuildConfiguration = "interactive",
+                annotationProcessing = {
+                    enabled = true, -- Enable annotation processing
+                },
             },
             -- enable code lens in the lsp
             referencesCodeLens = {
@@ -283,6 +310,10 @@ local function setup_jdtls()
             pattern = { "*.java" },
             callback = function()
                 local _, _ = pcall(vim.lsp.codelens.refresh)
+                vim.lsp.buf.execute_command({
+                    command = "java.project.refreshDiagnostics",
+                    arguments = { "full" }
+                })
             end
         })
     end

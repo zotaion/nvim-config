@@ -49,7 +49,7 @@ return {
                 },
                 -- setup how we interact with completion menus and options
                 mapping = cmp.mapping.preset.insert({
-                     -- previous suggestion
+                    -- previous suggestion
                     ["<C-k>"] = cmp.mapping.select_prev_item(),
                     -- next suggestion
                     ["<C-j>"] = cmp.mapping.select_next_item(),
@@ -60,7 +60,7 @@ return {
                     -- close completion window
                     ["<C-e>"] = cmp.mapping.abort(),
                     -- confirm completion, only when you explicitly selected an option
-                    ["<CR>"] = cmp.mapping.confirm({ select = false})
+                    ["<CR>"] = cmp.mapping.confirm({ select = false })
                 }),
                 -- Where and how should cmp rank and find completions
                 -- Order matters, cmp will provide lsp suggestions above all else
@@ -71,6 +71,14 @@ return {
                     { name = 'path' },
                     { name = "supermaven" },
                 })
+            })
+            -- Setup up vim-dadbod
+            cmp.setup.filetype({ "sql" }, {
+                sources = {
+                    { name = "vim-dadbod-completion" },
+                    { name = "buffer" },
+                    { name = "supermaven" },
+                },
             })
         end
     }
